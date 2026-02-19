@@ -69,7 +69,7 @@ const slides = [
         id: 7,
         image: slide7,
         subtitle: 'Legacy of Trust',
-        title: 'Serving Since \n1980.',
+        title: 'Serving Since \n1994.',
         description: 'Decades of experience in geriatric care. Trust us to provide the stability and expertise your family deserves.',
         primaryCta: 'Our History',
         secondaryCta: 'Testimonials'

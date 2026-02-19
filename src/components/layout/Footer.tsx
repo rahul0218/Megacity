@@ -1,7 +1,7 @@
 import React from 'react';
 import { MapPin, PhoneCall, Link } from 'lucide-react';
 
-import logo from '../../assets/logo.jpg';
+import logo from '../../assets/Megacity-LOGO.jpg';
 
 export const Footer: React.FC = () => {
     const currentYear = new Date().getFullYear();
@@ -12,10 +12,10 @@ export const Footer: React.FC = () => {
                     {/* Brand */}
                     <div>
                         <div className="flex items-center gap-2 mb-6">
-                            <img src={logo} alt="Megacity Nursing Home" className="h-12 w-auto brightness-0 invert" />
+                            <img src={logo} alt="Megacity Nursing Home" className="h-12 w-auto" />
                         </div>
                         <p className="text-gray-400 text-sm leading-relaxed mb-6">
-                            Commitment to life, dignity, and expert care. Providing a safe haven for our seniors since 1980.
+                            Commitment to life, dignity, and expert care. Providing a safe haven for our seniors since 1994.
                         </p>
                         <div className="flex gap-4">
                             <a href="#" className="w-10 h-10 bg-white/5 flex items-center justify-center rounded hover:bg-primary transition-colors"><Link size={18} /></a>

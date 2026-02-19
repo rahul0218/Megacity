@@ -237,7 +237,7 @@ const DoctorCard: React.FC<{ doctor: Doctor; category: string }> = ({ doctor, ca
     );
 };
 
-export const Doctors: React.FC = () => {
+export const Doctors: React.FC<{ mode?: 'grid' | 'carousel' }> = ({ mode = 'grid' }) => {
     const [searchQuery, setSearchQuery] = useState('');
 
     const formattedDoctors = useMemo(() => {
@@ -250,13 +250,15 @@ export const Doctors: React.FC = () => {
     }, []);
 
     const filteredDoctors = useMemo(() => {
+        if (mode === 'carousel') return formattedDoctors; // Show all or a subset in carousel, ignoring search
+
         const query = searchQuery.toLowerCase();
         return formattedDoctors.filter(doctor =>
             doctor.name.toLowerCase().includes(query) ||
             doctor.category.toLowerCase().includes(query) ||
             doctor.degree.toLowerCase().includes(query)
         );
-    }, [formattedDoctors, searchQuery]);
+    }, [formattedDoctors, searchQuery, mode]);
 
     return (
         <div className="py-24 sm:py-32 bg-white" id="doctors">
@@ -269,36 +271,56 @@ export const Doctors: React.FC = () => {
                         Dedicated specialists providing comprehensive care across all departments.
                     </p>
 
-                    {/* Search Bar */}
-                    <div className="max-w-xl mx-auto relative">
-                        <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <Search className="h-5 w-5 text-gray-400" />
+                    {/* Search Bar - Only show in grid mode */}
+                    {mode === 'grid' && (
+                        <div className="max-w-xl mx-auto relative">
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <Search className="h-5 w-5 text-gray-400" />
+                                </div>
+                                <input
+                                    type="text"
+                                    className="block w-full rounded-md border-0 py-3 pl-10 pr-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                    placeholder="Search doctors by name, specialty, or degree..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
                             </div>
-                            <input
-                                type="text"
-                                className="block w-full rounded-md border-0 py-3 pl-10 pr-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
-                                placeholder="Search doctors by name, specialty, or degree..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                            />
                         </div>
-                    </div>
+                    )}
                 </div>
 
                 {filteredDoctors.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {filteredDoctors.map((doctor, index) => (
-                            <DoctorCard
-                                key={index}
-                                doctor={doctor}
-                                category={doctor.category}
-                            />
-                        ))}
-                    </div>
+                    mode === 'carousel' ? (
+                        <div className="flex overflow-x-auto pb-8 gap-6 snap-x">
+                            {filteredDoctors.slice(0, 10).map((doctor, index) => ( // Show top 10 in carousel
+                                <div key={index} className="min-w-[300px] snap-center">
+                                    <DoctorCard
+                                        doctor={doctor}
+                                        category={doctor.category}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {filteredDoctors.map((doctor, index) => (
+                                <DoctorCard
+                                    key={index}
+                                    doctor={doctor}
+                                    category={doctor.category}
+                                />
+                            ))}
+                        </div>
+                    )
                 ) : (
                     <div className="text-center py-12">
                         <p className="text-gray-500 text-lg">No doctors found matching your search.</p>
+                    </div>
+                )}
+                {mode === 'carousel' && (
+                    <div className="text-center mt-8">
+                        <a href="/doctors" className="text-primary font-semibold hover:text-primary-hover">View All Doctors &rarr;</a>
                     </div>
                 )}
             </div>

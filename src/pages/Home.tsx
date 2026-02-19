@@ -11,7 +11,7 @@ export const Home: React.FC = () => {
             <Introduction />
             {/* Show preview of services and doctors on home */}
             <Services />
-            <Doctors />
+            <Doctors mode="carousel" />
         </main>
     );
 };
